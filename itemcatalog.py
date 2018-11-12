@@ -13,30 +13,39 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+category0 = {'name': 'Goalie', 'id': 0}
+category1 = {'name': 'Defenseman', 'id': 0}
+category2 = {'name': 'Forward', 'id': 0}
+categories = [category0, category1, category2]
+drill0 = {'name': 'Butterfly post to post', 'id': 0, 'description': 'Step 1....Step 2...'}
+drill1 = {'name': 'Three shots agles', 'id': 1, 'description': 'Step 1....Step 2...'}
+drill2 = {'name': 'Five shots', 'id': 2, 'description': 'Step 1....Step 2...'}
+drills = [drill0, drill1, drill2]
+
 @app.route('/')
 @app.route('/categories')
 def showCategories():
-    return "Show all categories"
+    return render_template('categories.html', categories = categories)
 
 @app.route('/category/<int:category_id>')
 def showCategory(category_id):
-    return "Show category %s" % category_id
+    return render_template('category.html', category = category0, drills = drills)
 
 @app.route('/category/<int:category_id>/<int:drill_id>')
 def showDrill(category_id, drill_id):
-    return "Show drill %s" % drill_id
+    return render_template('showDrill.html', drill = drill0)
 
 @app.route('/category/<int:category_id>/new')
 def newDrill(category_id):
-    return "Create a new drill in category %s" % category_id
+    return render_template('newDrill.html', category = category0)
 
 @app.route('/category/<int:category_id>/<int:drill_id>/edit')
 def editDrill(category_id, drill_id):
-    return "Edit drill %s" % drill_id
+    return render_template('editDrill.html', category = category0, drill = drill0)
 
 @app.route('/category/<int:category_id>/<int:drill_id>/delete')
 def deleteDrill(category_id, drill_id):
-    return "Deletes drill %s" % drill_id
+    return render_template('deleteDrill.html', category = category0 , drill = drill0)
 
 # @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
 # def restaurantMenuJSON(restaurant_id):
