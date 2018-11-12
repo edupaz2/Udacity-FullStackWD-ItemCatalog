@@ -45,9 +45,15 @@ Connection between URL -> method - Message:
 - /category/<int:category_id>/drills 						-> showCategory()	-> "This page shows drills from category %s" category_id
 - /category/<int:category_id>/drills/new					-> newDrill()		-> "This page creates a new drill for category %s" category_id
 - /category/<int:category_id>/drills/<int:drill_id>/edit 	-> editDrill()		-> "This page edits drill %s" drill_id
-- /category/<int:category_id>/drills/<int:drill_id>/delete	-> deletesDrill()	-> "This page edits deletes %s" drill_id
+- /category/<int:category_id>/drills/<int:drill_id>/delete	-> deleteDrill()	-> "This page edits deletes %s" drill_id
 
 ## Templates and Forms:
+Located at template folder:
+- /categories and / 										-> categories.html
+- /category/<int:category_id>/drills 						-> category.html
+- /category/<int:category_id>/drills/new					-> newDrill.html
+- /category/<int:category_id>/drills/<int:drill_id>/edit 	-> editDrill.html
+- /category/<int:category_id>/drills/<int:drill_id>/delete	-> deleteDrill.html
 
 
  
