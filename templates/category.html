@@ -1,7 +1,6 @@
 <html>
 	
 <head>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 	<div class = 'pane'>
@@ -18,9 +17,8 @@
     {% endif %}
 	{% endwith %}
 
-	{% if drills !=[] %}
-	<a href = "{{url_for('newDrill', category_id = category.id )}}">Create New Drill</a>
-	{% endif %}
+	<a href = '{{url_for('showCategories') }}'>Home</a></br>
+	<a href = '{{url_for('newDrill', category_id = category.id ) }}'>Create New Drill</a>
 	</br></br>
 
 	{% for i in drills %}

@@ -42,6 +42,4 @@ class Drill(Base):
         }
 
 engine = create_engine('sqlite:///drills.db')
-
-
 Base.metadata.create_all(engine)
