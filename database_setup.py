@@ -7,6 +7,24 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+    picture = Column(String(250))
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'name': self.name,
+            'email': self.email,
+            'picture': self.picture,
+            'id': self.id,
+        }
+
 class Category(Base):
     __tablename__ = 'category'
 
@@ -31,6 +49,8 @@ class Drill(Base):
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
 
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
     @property
     def serialize(self):
@@ -38,6 +58,25 @@ class Drill(Base):
         return {
             'name': self.name,
             'description': self.description,
+            'id': self.id,
+        }
+
+class Likes(Base):
+    __tablename__ = 'likes'
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+
+    drill_id = Column(Integer, ForeignKey('drill.id'))
+    drill = relationship(Drill)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'user': self.user_id,
+            'drill': self.drill_id,
             'id': self.id,
         }
 
