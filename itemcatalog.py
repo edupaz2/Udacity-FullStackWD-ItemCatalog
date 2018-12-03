@@ -13,7 +13,7 @@ import json
 from flask import make_response
 import requests
 
-from database_setup import Base, Category, Drill
+from database_setup import Base, Category, Drill, User
 
 app = Flask(__name__)
 
@@ -102,6 +102,12 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # see if user exists, if it doesn't make a new one
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -144,6 +150,10 @@ def gdisconnect():
         return response
 
 @app.route('/')
+@app.route('/index')
+def showIndex():
+    return render_template('index.html')
+
 @app.route('/categories')
 def showCategories():
     categories = session.query(Category).all()
@@ -161,6 +171,8 @@ def showDrill(category_id, drill_id):
 
 @app.route('/category/<int:category_id>/new/', methods=['GET', 'POST'])
 def newDrill(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     if request.method == 'POST':
         toCreate = Drill(name=request.form['name'], description=request.form['description'], category_id=category_id)
         session.add(toCreate)
@@ -172,6 +184,8 @@ def newDrill(category_id):
 
 @app.route('/category/<int:category_id>/<int:drill_id>/edit', methods=['GET', 'POST'])
 def editDrill(category_id, drill_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     toEdit = session.query(Drill).filter_by(id=drill_id).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -187,6 +201,8 @@ def editDrill(category_id, drill_id):
 
 @app.route('/category/<int:category_id>/<int:drill_id>/delete', methods=['GET', 'POST'])
 def deleteDrill(category_id, drill_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     toDelete = session.query(Drill).filter_by(id=drill_id).one()
     if request.method == 'POST':
         session.delete(toDelete)
@@ -196,13 +212,34 @@ def deleteDrill(category_id, drill_id):
         category = session.query(Category).filter_by(id=category_id).one()
         return render_template('deleteDrill.html', category = category , drill = toDelete)
 
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+
+###### Populate DB with categories
 def populateCategory(n):
     if len(session.query(Category).filter_by(name=n).all()) == 0:
         category_item = Category(name=n)
         session.add(category_item)
         session.commit()
 
-###### Populate DB with categories
 def populateDB():
     populateCategory('Goalie')
     populateCategory('Forward')
