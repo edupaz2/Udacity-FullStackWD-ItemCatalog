@@ -290,12 +290,17 @@ def populateCategory(n):
         session.commit()
 
 def populateDB():
-    populateCategory('Goalie')
-    populateCategory('Forward')
-    populateCategory('Defenseman')
     populateCategory('Offensive')
     populateCategory('Defensive')
-
+    populateCategory('Forward')
+    populateCategory('Defenseman')
+    populateCategory('Goalie')
+    populateCategory('Warm-up')
+    populateCategory('Shooting')
+    populateCategory('Passing')
+    populateCategory('Powerplay')
+    populateCategory('Penalty Killing')
+    populateCategory('Fun games')
 
 if __name__ == '__main__':
     app.debug = True
