@@ -22,10 +22,12 @@
 
 {% for i in drills %}
 <p class="left-bullet"><a href = "{{url_for('showDrill', drill_id=i.id)}}"> {{i.name}}</a></p>
+{% if user.id == i.user_id %}
 <a href='{{url_for('editDrill', drill_id=i.id ) }}' >Edit</a>
 </br>
 <a href='{{url_for('deleteDrill', drill_id=i.id ) }}' >Delete</a>
 </br>
+{% endif %}
 </br>
 {% endfor %}
 </div>
