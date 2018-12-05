@@ -61,24 +61,5 @@ class Drill(Base):
             'id': self.id,
         }
 
-class Likes(Base):
-    __tablename__ = 'likes'
-    id = Column(Integer, primary_key=True)
-
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User)
-
-    drill_id = Column(Integer, ForeignKey('drill.id'))
-    drill = relationship(Drill)
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {
-            'user': self.user_id,
-            'drill': self.drill_id,
-            'id': self.id,
-        }
-
 engine = create_engine('sqlite:///drills.db')
 Base.metadata.create_all(engine)
