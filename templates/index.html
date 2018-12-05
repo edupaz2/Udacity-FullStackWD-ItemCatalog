@@ -59,7 +59,7 @@
 <div class="right-container-dwn">
 <h4>Random drill picks</h4>
 {% for drill in random_drills %}
-<li><a href = "{{url_for('showDrill', drill_id = drill.id)}}"> <strong>{{ drill.name }}</strong> Created by {{ drill.user.name }}. <br></a></li>
+<li><a href = "{{url_for('showDrill', drill_id = drill.id)}}"> <strong>{{ drill.name }}</strong></a> by {{ drill.user.name }}.</li>
 {% endfor %}
 <br>
 <!--strong>15.04.2010</strong> Lorem Ipsum is simply dummy text of the
