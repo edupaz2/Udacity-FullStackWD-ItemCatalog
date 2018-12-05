@@ -192,14 +192,7 @@ def showCategory(category_id):
     drills = session.query(Drill).filter_by(category_id=category_id).all()
     return render_template('category.html', category = category, drills = drills, user=getCurrentUserInfo())
 
-@app.route('/drill/<int:drill_id>')
-def showDrill(drill_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    toView = session.query(Drill).filter_by(id=drill_id).one()
-    return render_template('drill.html', drill = toView, user=getCurrentUserInfo())
-
-@app.route('/drill/new/<int:category_id>', methods=['GET', 'POST'])
+@app.route('/category/<int:category_id>/new/', methods=['GET', 'POST'])
 def newDrill(category_id):
     if 'username' not in login_session:
         return redirect('/login')
@@ -211,6 +204,13 @@ def newDrill(category_id):
     else:
         category = session.query(Category).filter_by(id=category_id).one()
         return render_template('newDrill.html', category=category, user=getCurrentUserInfo())
+
+@app.route('/drill/<int:drill_id>')
+def showDrill(drill_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    toView = session.query(Drill).filter_by(id=drill_id).one()
+    return render_template('drill.html', drill = toView, user=getCurrentUserInfo())
 
 @app.route('/drill/<int:drill_id>/edit', methods=['GET', 'POST'])
 def editDrill(drill_id):
@@ -300,9 +300,10 @@ def populateDB():
     populateCategory('Warm-up')
     populateCategory('Shooting')
     populateCategory('Passing')
-    populateCategory('Powerplay')
+    populateCategory('Power Play')
     populateCategory('Penalty Killing')
     populateCategory('Fun games')
+    populateCategory('Conditioning')
 
 if __name__ == '__main__':
     app.debug = True
