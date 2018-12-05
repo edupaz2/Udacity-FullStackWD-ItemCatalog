@@ -192,14 +192,14 @@ def showCategory(category_id):
     drills = session.query(Drill).filter_by(category_id=category_id).all()
     return render_template('category.html', category = category, drills = drills, username=getUsername())
 
-@app.route('/drills/<int:drill_id>')
+@app.route('/drill/<int:drill_id>')
 def showDrill(drill_id):
     if 'username' not in login_session:
         return redirect('/login')
     toView = session.query(Drill).filter_by(id=drill_id).one()
     return render_template('drill.html', drill = toView, username=getUsername())
 
-@app.route('/drills/new/<int:category_id>', methods=['GET', 'POST'])
+@app.route('/drill/new/<int:category_id>', methods=['GET', 'POST'])
 def newDrill(category_id):
     if 'username' not in login_session:
         return redirect('/login')
@@ -212,7 +212,7 @@ def newDrill(category_id):
         category = session.query(Category).filter_by(id=category_id).one()
         return render_template('newDrill.html', category=category, username=getUsername())
 
-@app.route('/drills/<int:drill_id>/edit', methods=['GET', 'POST'])
+@app.route('/drill/<int:drill_id>/edit', methods=['GET', 'POST'])
 def editDrill(drill_id):
     if 'username' not in login_session:
         return redirect('/login')
@@ -228,7 +228,7 @@ def editDrill(drill_id):
     else:
         return render_template('editDrill.html', drill = toEdit, username=getUsername())
 
-@app.route('/drills/<int:drill_id>/delete', methods=['GET', 'POST'])
+@app.route('/drill/<int:drill_id>/delete', methods=['GET', 'POST'])
 def deleteDrill(drill_id):
     if 'username' not in login_session:
         return redirect('/login')
@@ -241,6 +241,23 @@ def deleteDrill(drill_id):
     else:
         return render_template('deleteDrill.html', drill = toDelete, username=getUsername())
 
+@app.route('/drill/<int:drill_id>/JSON')
+def drillJSON(drill_id):
+    drill = session.query(Drill).filter_by(id=drill_id).one()
+    return jsonify(drill=drill.serialize)
+
+@app.route('/category/<int:category_id>/JSON')
+def categoryJSON(category_id):
+    category = session.query(Category).filter_by(id=category_id).one()
+    drills = session.query(Drill).filter_by(category_id=category_id).all()
+    return jsonify(category=category.serialize, drills=[d.serialize for d in drills])
+
+@app.route('/categories/JSON')
+def categoriesJSON():
+    categories = session.query(Category).all()
+    return jsonify(categories=[c.serialize for c in categories])
+
+#### Helper functions
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
