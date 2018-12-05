@@ -2,54 +2,41 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Title goes here</title>
+  <title>Hockey Drill DB by Eduardo Paz Orduña</title>
   <meta name="description" content="Description of your site goes here">
   <meta name="keywords" content="keyword1, keyword2, keyword3">
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 <div id="main-wraper">
-<div id="top-wraper">
-<div id="banner">Hockey Drill DB</div>
-<div id="nav">
-<ul>
-  <li><a href="#">Home</a></li>
-  <li><a href="#">About</a></li>
-  <li><a href="#">Categories</a></li>
-  <!--li><a href="#">Email</a></li>
-  <li><a href="#">Resources</a></li-->
-  <li style="border: medium none ;"><a href="#">Recent drills</a></li>
-</ul>
-</div>
-</div>
+{% include 'banner.html' %}
+{% include 'nav.html' %}
 <div id="mid-wraper">
-<!--Designed by--><a target="_blank" href="http://www.htmltemplates.net"><img src="../static/design.gif" class="copyright" alt="htmltemplates.net"></a>
+
 <div class="mid-wraper-top">
+
 <div class="mid-leftouter">
+
 <div class="mid-left-container">
 <h1>Welcome to <span class="yellow-heading">Hockey Drills DB</span></h1>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting
-industry. Lorem Ipsum has been the industry's standard dummy text ever
-since the 1500s, when an unknown printer took a galley of type and
-scrambled it to make a type specimen book. It has survived not only
-five centuries, but also the leap into electronic typesetting,
-remaining essentially unchanged.<br>
+<p>Hockey Drills DB is a site to help coaches shared hockey drills
+among their fellow colleagues.<br>
+<br>
+Project developed for Udacity Full Stack Web Developer Nanodegree by Eduardo Paz Orduña.
+The purpose of this website is to allow users view/publish/edit hockey drills. You can login with Google Authentication System.
+<br>
 <br>
 </p>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting
-industry. Lorem Ipsum has been the industry's standard dummy text ever
-since the 1500s, when an unknown printer took a galley of type and
-scrambled it to make a type specimen book. It has survived not only
-five centuries.</p>
-<p class="left-bullet">Lorem Ipsum is that it has a more-or-less normal
-distribution of letters, as opposed to using</p>
-<p class="left-bullet">Lorem Ipsum is that it has a more-or-less normal
-distribution of letters, </p>
-<p class="left-bullet">Lorem Ipsum is that it has a more-or-less normal</p>
-<p class="left-bullet">Lorem Ipsum is that it has a more-or-less normal
-distribution of letters, as opposed to</p>
+<p>The site is organized in categories and drills.</p>
+</p>
+<p>The site has been developed using.</p>
+<p class="left-bullet">Vagrant</p>
+<p class="left-bullet">Flask</p>
+<p class="left-bullet">SQLAlchemy</p>
+<p class="left-bullet">Google Authentication</p>
 </div>
-<div class="mid-left-container" style="margin-top: 10px;">
+
+<!--div class="mid-left-container" style="margin-top: 10px;">
 <div class="inner-left">
 <h2>Abo<span class="yellow-heading">ut</span></h2>
 <div style="border-right: 1px solid rgb(153, 153, 153); width: 294px; float: left; padding-right: 12px;">
@@ -59,59 +46,47 @@ distribution of letters, as opposed to</p>
 <p>The purpose of this website is to allow users view/publish/edit hockey drills. You can login with Google Authentication System.<br>
 <br>
 </p>
-<!--strong><a href="#" class="read-more">read more...</a></strong--></div>
+</div>
 </div>
 <div class="inner-right">
 <h2>Recent <span class="yellow-heading">Drills</span></h2>
-<div style="width: 290px; float: left; padding-left: 8px;">There are
-many variations of passages of Lorem Ipsum available, but the majority
-have suffered alteration in some form, by injected humour, or
-randomised words which don't look even slightly believable. If you are
-going to use a passage of Lorem Ipsum, you need to be sure there isn't
-anything embarrassing hidden in the middle of text. you need to be sure
-there isn't.<br>
+<div style="width: 290px; float: left; padding-left: 8px;">
+<p class="left-bullet">Drill "1on1" by User Edu</p>
 <br>
-<strong><a href="#" class="read-more">read more...</a></strong></div>
+<br>
+<strong><a href="#" class="read-more">read more...</a></strong>
 </div>
 </div>
-</div>
+</div-->
+
+</div><!-- mid-left-outer-->
+
 <div class="right-container">
 <div class="right-container-top">
-<h3>Popular Categ<span class="yellow-heading">ories</span></h3>
+<h3><span class="yellow-heading">Random categories picks</span></h3>
 <ul>
   {% for category in categories %}
   <li><a href = "{{url_for('showCategory', category_id = category.id)}}"> <p>{{category.name}}</p></a></li>
   {% endfor %}
-  <li><a href="#">Lorem Ipsum is simply dummy</a></li>
-  <li><a href="#">Lorem Ipsum is</a></li>
-  <li><a href="#">Lorem Ipsum</a></li>
-  <li><a href="#">Lorem Ipsum is simply dummy</a></li>
-  <li><a href="#">Lorem Ipsum is simply</a></li>
-  <li><a href="#">Lorem Ipsum is simply </a></li>
-  <li><a href="#">Lorem Ipsum is simply dummy</a></li>
 <strong><a href="{{url_for('showCategories')}}" class="read-more">read more...</a></strong>
 </ul>
 </div>
 <div class="right-container-dwn">
-<h4>News</h4>
-<strong>15.04.2010</strong> Lorem Ipsum is simply dummy text of the
-printing and typesetting industry. Lorem Ipsum has been. <br>
+<h4>Random drill picks</h4>
+{% for drill in random_drills %}
+<li><a href = "{{url_for('showDrill', drill_id = drill.id)}}"> <strong>{{ drill.name }}</strong> Created by {{ drill.user.name }}. <br></a></li>
+{% endfor %}
 <br>
-<strong>15.04.2010</strong> Lorem Ipsum is simply dummy text of the
+<!--strong>15.04.2010</strong> Lorem Ipsum is simply dummy text of the
 printing and typesetting industry. Lorem Ipsum has been.<br>
-<br>
-<strong><a href="#" class="read-more-right">read more...</a></strong> </div>
+<br-->
+<!--strong><a href="#" class="read-more-right">read more...</a></strong-->
 </div>
-</div>
+</div><!-- right-container -->
+
+</div><!-- mid-wraper-top-->
+
 <div class="mid-wraper-bttm"><img src="../static/mid-bttm.jpg" alt=""></div>
-</div>
-<div class="footer">
-<div class="footer-side"><a href="#">Home</a> <a href="#">About</a> <a href="#">Categories</a> <a href="#">Recent Drills</a> </div>
-
-<div class="footer-right">Designed by <a target="_blank" href="https://www.linkedin.com/in/edupaz/">Edupaz@LinkedIn</a>
-
-</div>
-</div>
-</div>
-
+</div><!-- mid-wraper-->
+{% include 'footer.html' %}
 </body></html>

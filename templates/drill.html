@@ -1,0 +1,41 @@
+<html>
+
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+<div id="main-wraper">
+{% include 'banner.html' %}
+{% include 'nav.html' %}
+<div id="mid-wraper">
+
+<div class="about-mid-wraper-top">
+
+<div class="mid-leftouter">
+
+<div class="mid-left-container">
+<h1>Drill <span class="yellow-heading">{{ drill.name }}</span></h1>
+<p>{{ drill.description }}</p>
+<br>
+<br>
+<p>Created by {{ drill.user.name }}</p>
+<br>
+<a href='{{url_for('editDrill', drill_id=drill.id ) }}' >Edit</a>
+</br>
+<a href='{{url_for('deleteDrill', drill_id=drill.id ) }}' >Delete</a>
+</div>
+
+</div><!-- mid-left-outer -->
+
+</div><!-- mid-wraper-top -->
+
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+</div><!-- mid-wraper -->
+
+{% include 'footer.html' %}
+</div><!-- main-wraper -->
+
+</body>
+</html>
+

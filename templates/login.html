@@ -1,13 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script src="//apis.google.com/js/platform.js?onload=start"> </script>
-<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+  <meta charset="UTF-8">
+  <title>Hockey Drill DB by Eduardo Paz Orduña</title>
+  <meta name="description" content="Description of your site goes here">
+  <meta name="keywords" content="keyword1, keyword2, keyword3">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+  <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 </head>
-
 <body>
+
+<div id="main-wraper">
+{% include 'banner.html' %}
+<div id="mid-wraper">
+
+<div class="about-mid-wraper-top">
+
+<div class="mid-leftouter">
+
+<div class="mid-left-container">
+<h1>Welcome to <span class="yellow-heading">Hockey Drills DB</span></h1>
+<p>Hockey Drills DB is a site to help coaches shared hockey drills
+among their fellow colleagues.<br>
+<br>
+</p>
+<p>The site is organized in categories and drills.</p>
+</p>
+<p>The site has been developed using.</p>
+<p class="left-bullet">Vagrant</p>
+<p class="left-bullet">Flask</p>
+<p class="left-bullet">SQLAlchemy</p>
+<p class="left-bullet">Google Authentication</p>
+</div>
+
+</div><!-- mid-left-outer-->
+
+<div class="right-container">
+<div class="right-container-top">
+<h3>Please <span class="yellow-heading">Login</span></h3>
+<ul>
 <!-- GOOGLE PLUS SIGN IN BUTTON-->
 <div id="signinButton">
 <span class="g-signin"
@@ -21,7 +55,6 @@
 </span>
 </div>
 <div id="result"></div>
-
 <script>
 function signInCallback(authResult) {
   if (authResult['code']) {
@@ -41,7 +74,7 @@ function signInCallback(authResult) {
         if (result) {
           $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
           setTimeout(function() {
-            window.location.href = "/categories";
+            window.location.href = "/index";
           }, 4000);
         } else if (authResult['error']) {
           console.log('There was an error: ' + authResult['error']);
@@ -54,5 +87,14 @@ function signInCallback(authResult) {
 }
 </script>
 <!--END GOOGLE PLUS SIGN IN BUTTON -->
-</body>
-</html>
+</ul>
+</div>
+</div><!-- right-container -->
+
+</div><!-- mid-wraper-top-->
+
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+</div><!-- mid-wraper-->
+{% include 'footer.html' %}
+</div>
+</body></html>

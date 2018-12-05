@@ -33,6 +33,14 @@ def showLogin():
     login_session['state'] = state
     return render_template('login.html', STATE=state)
 
+@app.route('/about')
+def showAbout():
+    if 'username' not in login_session:
+        return redirect('/login')
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    return render_template('about.html', STATE=state, username=getUsername())
+
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -143,47 +151,69 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect('/login')
+        #return response
     else:
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect(url_for('showLogin'))
+        #return response
 
 @app.route('/')
 @app.route('/index')
 def showIndex():
-    return render_template('index.html')
+    print('login_session:', login_session)
+    if 'username' not in login_session:
+        return redirect('/login')
+
+    categories = session.query(Category).all()
+    random_categories = random.sample(categories, min(4, len(categories)))
+    drills = session.query(Drill).all()
+    random_drills = random.sample(drills, min(2, len(drills)))
+    return render_template('index.html', username=getUsername(), categories=random_categories, random_drills=random_drills)
 
 @app.route('/categories')
 def showCategories():
+    if 'username' not in login_session:
+        return redirect('/login')
     categories = session.query(Category).all()
-    return render_template('categories.html', categories = categories)
+    return render_template('categories.html', categories = categories, username=getUsername())
 
 @app.route('/category/<int:category_id>')
 def showCategory(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     category = session.query(Category).filter_by(id=category_id).one()
     drills = session.query(Drill).filter_by(category_id=category_id).all()
-    return render_template('category.html', category = category, drills = drills)
+    return render_template('category.html', category = category, drills = drills, username=getUsername())
 
-@app.route('/category/<int:category_id>/<int:drill_id>')
-def showDrill(category_id, drill_id):
-    return render_template('showDrill.html', drill = drill0)
+@app.route('/drills/<int:drill_id>')
+def showDrill(drill_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    toView = session.query(Drill).filter_by(id=drill_id).one()
+    return render_template('drill.html', drill = toView, username=getUsername())
 
-@app.route('/category/<int:category_id>/new/', methods=['GET', 'POST'])
+@app.route('/drills/new/<int:category_id>', methods=['GET', 'POST'])
 def newDrill(category_id):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        toCreate = Drill(name=request.form['name'], description=request.form['description'], category_id=category_id)
+        toCreate = Drill(name=request.form['name'], description=request.form['description'], category_id=category_id, user_id=getUserID(login_session['email']))
         session.add(toCreate)
         session.commit()
         return redirect(url_for('showCategory', category_id = category_id))
     else:
-        # category
-        return render_template('newDrill.html')
+        category = session.query(Category).filter_by(id=category_id).one()
+        return render_template('newDrill.html', category=category, username=getUsername())
 
-@app.route('/category/<int:category_id>/<int:drill_id>/edit', methods=['GET', 'POST'])
-def editDrill(category_id, drill_id):
+@app.route('/drills/<int:drill_id>/edit', methods=['GET', 'POST'])
+def editDrill(drill_id):
     if 'username' not in login_session:
         return redirect('/login')
     toEdit = session.query(Drill).filter_by(id=drill_id).one()
@@ -196,21 +226,20 @@ def editDrill(category_id, drill_id):
         session.commit()
         return redirect(url_for('showCategory', category_id = category_id))
     else:
-        category = session.query(Category).filter_by(id=category_id).one()
-        return render_template('editDrill.html', category = category, drill = toEdit)
+        return render_template('editDrill.html', drill = toEdit, username=getUsername())
 
-@app.route('/category/<int:category_id>/<int:drill_id>/delete', methods=['GET', 'POST'])
-def deleteDrill(category_id, drill_id):
+@app.route('/drills/<int:drill_id>/delete', methods=['GET', 'POST'])
+def deleteDrill(drill_id):
     if 'username' not in login_session:
         return redirect('/login')
     toDelete = session.query(Drill).filter_by(id=drill_id).one()
     if request.method == 'POST':
+        category_id = toDelete.category_id
         session.delete(toDelete)
         session.commit()
         return redirect(url_for('showCategory', category_id = category_id))
     else:
-        category = session.query(Category).filter_by(id=category_id).one()
-        return render_template('deleteDrill.html', category = category , drill = toDelete)
+        return render_template('deleteDrill.html', drill = toDelete, username=getUsername())
 
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
@@ -232,6 +261,9 @@ def getUserID(email):
         return user.id
     except:
         return None
+
+def getUsername():
+    return login_session['username']
 
 ###### Populate DB with categories
 def populateCategory(n):

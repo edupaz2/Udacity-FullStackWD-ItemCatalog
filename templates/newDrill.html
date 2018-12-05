@@ -5,16 +5,37 @@
 </head>
 
 <body>
-	<h1>New Drill</h1>
+<div id="main-wraper">
+{% include 'banner.html' %}
+{% include 'nav.html' %}
+<div id="mid-wraper">
 
-	<form action="#" method = 'post'>
+<div class="about-mid-wraper-top">
+
+<div class="mid-leftouter">
+
+<div class="mid-left-container">
+<h1>New drill in <span class="yellow-heading">{{ category.name }}</span> category</h1>
+<form action="#" method = 'post'>
 		<p>Name:</p>
 			<input type ='text' size='30' name='name'>
 		<p>Description:</p>
-			<input type ='text' size='30' name='description'>
+		<textarea rows = "5" cols = "50" name = "description">Enter description here...
+         </textarea><br>
 
 		<input type='submit' value='Create'>
 	</form>
+</div>
+
+</div><!-- mid-left-outer -->
+
+</div><!-- mid-wraper-top -->
+
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+</div><!-- mid-wraper -->
+
+{% include 'footer.html' %}
+</div><!-- main-wraper -->
 
 </body>
 </html>

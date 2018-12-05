@@ -1,0 +1,13 @@
+<div id="nav">
+<ul>
+  <li><a href="{{url_for('showIndex')}}">Home</a></li>
+  <!--li><a href="{{url_for('showAbout')}}">About</a></li-->
+  <li><a href="{{url_for('showCategories')}}">Categories</a></li>
+  <!--li><a href="#">Email</a></li>
+  <li><a href="#">Resources</a></li-->
+  <!--li style="border: medium none ;"><a href="#">Recent drills</a></li-->
+  	{% if username %}
+	<li><a target="_blank" href="{{url_for('gdisconnect')}}">LOGOUT</a></li>
+	{% endif %}
+</ul>
+</div>

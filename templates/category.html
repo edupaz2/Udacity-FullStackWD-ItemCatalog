@@ -3,37 +3,49 @@
 <head>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
-	<div class = 'pane'>
-	<h1>{{ category.name }}</h1>
-	
-	{% with messages = get_flashed_messages() %}
-  	{% if messages %}
-      
-        <ul>
-        {% for message in messages %}
-            <li> <strong> {{ message }} </strong> </li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-	{% endwith %}
+<div id="main-wraper">
+{% include 'banner.html' %}
+{% include 'nav.html' %}
+<div id="mid-wraper">
 
-	<a href = '{{url_for('showCategories') }}'>Home</a></br>
-	<a href = '{{url_for('newDrill', category_id = category.id ) }}'>Create New Drill</a>
-	</br></br>
+<div class="about-mid-wraper-top">
 
-	{% for i in drills %}
-		<p>{{i.name}}</p>
-		<p>{{i.description}}</p>
-		<a href='{{url_for('editDrill', category_id = category.id, drill_id=i.id ) }}' >Edit</a>
-		</br>
-		<a href='{{url_for('deleteDrill', category_id = category.id, drill_id=i.id ) }}' >Delete</a>
-		</br>
-		</br>
-	{% endfor %}
-	</br></br>
+<div class="mid-leftouter">
 
-	</div>
+<div class="mid-left-container">
+<h1><span class="yellow-heading">{{ category.name }} ({{ drills|length }} drills)</span></h1>
+{% if drills|length == 0 %}
+<p class="left-bullet">No items</p>
+{% endif %}
+
+{% for i in drills %}
+<p class="left-bullet"><a href = "{{url_for('showDrill', drill_id=i.id)}}"> {{i.name}}</a></p>
+<a href='{{url_for('editDrill', drill_id=i.id ) }}' >Edit</a>
+</br>
+<a href='{{url_for('deleteDrill', drill_id=i.id ) }}' >Delete</a>
+</br>
+</br>
+{% endfor %}
+</div>
+
+</div><!-- mid-left-outer -->
+
+<div class="right-container">
+<div class="right-container-top">
+<h3><span class="yellow-heading">Add new drill</span></h3>
+<a href='{{url_for('newDrill', category_id = category.id) }}' >Click here</a>
+</div>
+</div><!-- right-container -->
+
+</div><!-- mid-wraper-top -->
+
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+</div><!-- mid-wraper -->
+
+{% include 'footer.html' %}
+</div><!-- main-wraper -->
 </body>
 
 </html>

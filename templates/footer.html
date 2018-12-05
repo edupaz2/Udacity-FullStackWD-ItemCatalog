@@ -1,0 +1,7 @@
+<div class="footer">
+<div class="footer-side">Designed by <a target="_blank" href="https://www.linkedin.com/in/edupaz/">edupaz@LinkedIn</a> for Udacity FullStack Web Developer Nanodegree</div>
+{% if username %}
+<div class="footer-right">Logged in as {{ username }}<a target="_blank" href="{{url_for('gdisconnect')}}">LOGOUT</a></div>
+{% endif %}
+</div>
+</div>

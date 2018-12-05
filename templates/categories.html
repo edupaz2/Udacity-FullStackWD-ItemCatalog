@@ -6,19 +6,26 @@
 
 
 <body>
-<div class = 'pane'>
-<h1>Categories</h1>
+<div id="main-wraper">
+{% include 'banner.html' %}
+{% include 'nav.html' %}
+
+<div class="about-mid-wraper-top">
+<div class="about-mid-leftouter">
+<div class="about-mid-left-container">
+<h1><span class="yellow-heading">Categories</span></h1>
 
 {% for category in categories %}
-<a href = "{{url_for('showCategory', category_id = category.id)}}"> <p>{{category.name}}</p></a>
+<p class="left-bullet"><a href = "{{url_for('showCategory', category_id = category.id)}}"> {{category.name}}</a></p>
 {% endfor %}
 
 </div>
-<div class = 'pane'>
-<h1>Popular Drills</h1>
 </div>
-<div class = 'pane'>
-<h1>Best collaborators</h1>
+</div>
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+
+
+{% include 'footer.html' %}
 </div>
 </body>
 

@@ -44,7 +44,7 @@ class Drill(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
-    description = Column(String(250))
+    description = Column(String(1000))
 
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)

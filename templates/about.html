@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hockey Drill DB by Eduardo Paz Orduña</title>
+  <meta name="description" content="Description of your site goes here">
+  <meta name="keywords" content="keyword1, keyword2, keyword3">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div id="main-wraper">
+{% include 'banner.html' %}
+{% include 'nav.html' %}
+<div class="about-mid-wraper-top">
+<div class="about-mid-leftouter">
+<div class="about-mid-left-container">
+<h1>Welcome to <span class="yellow-heading">Hockey Drills DB</span></h1>
+<p>Hockey Drills DB is a site to help coaches shared hockey drills
+among their fellow colleagues.<br>
+<br>
+</p>
+<p>The site is organized in categories and drills.</p>
+</p>
+<p>The site has been developed using.</p>
+<p class="left-bullet">Vagrant</p>
+<p class="left-bullet">Flask</p>
+<p class="left-bullet">SQLAlchemy</p>
+<p class="left-bullet">Google Authentication</p>
+</div>
+</div>
+</div>
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+{% include 'footer.html' %}
+</div>
+</body></html>

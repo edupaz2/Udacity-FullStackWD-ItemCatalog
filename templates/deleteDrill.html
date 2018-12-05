@@ -4,13 +4,36 @@
 </head>
 
 <body>
-	<h1> Are you sure you want to delete {{drill.name}}? </h1>
 
-	<form action="#" method = 'post'>
-		<input type='submit', value = 'Delete'>
-	</form>
+<div id="main-wraper">
+{% include 'banner.html' %}
+{% include 'nav.html' %}
+<div id="mid-wraper">
 
-	<a href = '#'> Cancel </a>
+<div class="about-mid-wraper-top">
+
+<div class="mid-leftouter">
+
+<div class="mid-left-container">
+<h1> Are you sure you want to delete {{drill.name}}? </h1>
+
+<form action="#" method = 'post'>
+	<input type='submit', value = 'Delete'>
+</form>
+
+<a href = '#'> Cancel </a>
+</div>
+
+</div><!-- mid-left-outer -->
+
+</div><!-- mid-wraper-top -->
+
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+</div><!-- mid-wraper -->
+
+{% include 'footer.html' %}
+</div><!-- main-wraper -->
+
 </body>
 
 </html>
