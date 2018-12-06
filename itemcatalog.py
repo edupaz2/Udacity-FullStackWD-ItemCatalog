@@ -177,7 +177,7 @@ def showIndex():
     random_drills = random.sample(drills, min(2, len(drills)))
     return render_template('index.html', user=getCurrentUserInfo(), categories=random_categories, random_drills=random_drills)
 
-@app.route('/categories')
+@app.route('/categories/')
 def showCategories():
     if 'username' not in login_session:
         return redirect('/login')
