@@ -1,6 +1,11 @@
-from flask import Flask, render_template, request
-from flask import redirect, jsonify, url_for, flash
-
+from flask import (Flask,
+                   render_template,
+                   request,
+                   redirect,
+                   jsonify,
+                   url_for,
+                   flash)
+from functools import wraps
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -29,6 +34,15 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash("You are not allowed to access there")
+        return redirect('/login')
+    return decorated_function
 
 @app.route('/login')
 def showLogin():
@@ -36,13 +50,13 @@ def showLogin():
                     for x in xrange(32))
     login_session['state'] = state
     return render_template('login.html',
-                           STATE=state)
+                           STATE=state, client_id=CLIENT_ID)
 
 
+@login_required
 @app.route('/about')
 def showAbout():
-    if 'username' not in login_session:
-        return redirect('/login')
+
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
@@ -125,7 +139,7 @@ def gconnect():
 
     data = answer.json()
 
-    login_session['username'] = data['name']
+    login_session['username'] = data.get('name', '')
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
@@ -185,13 +199,11 @@ def gdisconnect():
         return redirect(url_for('showLogin'))
 
 
+@login_required
 @app.route('/')
 @app.route('/index')
 def showIndex():
     print('login_session:', login_session)
-    if 'username' not in login_session:
-        return redirect('/login')
-
     categories = session.query(Category).all()
     random_categories = random.sample(categories, min(4, len(categories)))
     drills = session.query(Drill).all()
@@ -202,21 +214,19 @@ def showIndex():
                            random_drills=random_drills)
 
 
+@login_required
 @app.route('/categories/')
 def showCategories():
-    if 'username' not in login_session:
-        return redirect('/login')
     categories = session.query(Category).all()
     return render_template('categories.html',
                            categories=categories,
                            user=getCurrentUserInfo())
 
 
+@login_required
 @app.route('/category/<int:category_id>')
 def showCategory(category_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    category = session.query(Category).filter_by(id=category_id).one()
+    category = session.query(Category).filter_by(id=category_id).one_or_none()
     drills = session.query(Drill).filter_by(category_id=category_id).all()
     return render_template('category.html',
                            category=category,
@@ -224,10 +234,9 @@ def showCategory(category_id):
                            user=getCurrentUserInfo())
 
 
+@login_required
 @app.route('/category/<int:category_id>/new/', methods=['GET', 'POST'])
 def newDrill(category_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         toCreate = Drill(name=request.form['name'],
                          description=request.form['description'],
@@ -238,27 +247,25 @@ def newDrill(category_id):
         return redirect(url_for('showCategory',
                                 category_id=category_id))
     else:
-        category = session.query(Category).filter_by(id=category_id).one()
+        category = session.query(Category).filter_by(id=category_id).one_or_none()
         return render_template('newDrill.html',
                                category=category,
                                user=getCurrentUserInfo())
 
 
+@login_required
 @app.route('/drill/<int:drill_id>')
 def showDrill(drill_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    toView = session.query(Drill).filter_by(id=drill_id).one()
+    toView = session.query(Drill).filter_by(id=drill_id).one_or_none()
     return render_template('drill.html',
                            drill=toView,
                            user=getCurrentUserInfo())
 
 
+@login_required
 @app.route('/drill/<int:drill_id>/edit', methods=['GET', 'POST'])
 def editDrill(drill_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    toEdit = session.query(Drill).filter_by(id=drill_id).one()
+    toEdit = session.query(Drill).filter_by(id=drill_id).one_or_none()
     if (request.method == 'POST' and
             toEdit.user_id == getUserID(login_session['email'])):
         if request.form['name']:
@@ -267,7 +274,7 @@ def editDrill(drill_id):
             toEdit.description = request.form['description']
         session.add(toEdit)
         session.commit()
-        category_id = toDelete.category_id
+        category_id = toEdit.category_id
         return redirect(url_for('showCategory',
                                 category_id=category_id))
     else:
@@ -276,11 +283,10 @@ def editDrill(drill_id):
                                user=getCurrentUserInfo())
 
 
+@login_required
 @app.route('/drill/<int:drill_id>/delete', methods=['GET', 'POST'])
 def deleteDrill(drill_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    toDelete = session.query(Drill).filter_by(id=drill_id).one()
+    toDelete = session.query(Drill).filter_by(id=drill_id).one_or_none()
     if (request.method == 'POST' and
             toDelete.user_id == getUserID(login_session['email'])):
         category_id = toDelete.category_id
@@ -294,20 +300,23 @@ def deleteDrill(drill_id):
                                user=getCurrentUserInfo())
 
 
+@login_required
 @app.route('/drill/<int:drill_id>/JSON')
 def drillJSON(drill_id):
-    drill = session.query(Drill).filter_by(id=drill_id).one()
+    drill = session.query(Drill).filter_by(id=drill_id).one_or_none()
     return jsonify(drill=drill.serialize)
 
 
+@login_required
 @app.route('/category/<int:category_id>/JSON')
 def categoryJSON(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
+    category = session.query(Category).filter_by(id=category_id).one_or_none()
     drills = session.query(Drill).filter_by(category_id=category_id).all()
     return jsonify(category=category.serialize,
                    drills=[d.serialize for d in drills])
 
 
+@login_required
 @app.route('/categories/JSON')
 def categoriesJSON():
     categories = session.query(Category).all()
@@ -321,13 +330,13 @@ def createUser(login_session):
                    picture=login_session['picture'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
     return user.id
 
 
 def getUserInfo(user_id):
     try:
-        user = session.query(User).filter_by(id=user_id).one()
+        user = session.query(User).filter_by(id=user_id).one_or_none()
         return user
     except:
         return None
@@ -335,7 +344,7 @@ def getUserInfo(user_id):
 
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = session.query(User).filter_by(email=email).one_or_none()
         return user.id
     except:
         return None
