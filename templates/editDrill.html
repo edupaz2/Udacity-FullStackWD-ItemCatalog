@@ -5,18 +5,37 @@
 </head>
 
 <body>
+<div id="main-wraper">
 {% include 'banner.html' %}
-	<h1> Edit Drill </h1>
+{% include 'nav.html' %}
+<div id="mid-wraper">
 
-	<form action="#" method = 'post'>
-		<p>Name:</p>
-			<input type ='text' size='30' name='name' placeholder = '{{drill.name }}'>
-		<p>Description:</p>
-			<input type ='text' size='30' name='description' placeholder = '{{drill.description}}'>
-		<input type='submit' value='Edit'>
-		<a href = '#'> Cancel </a>
-	</form>
+<div class="about-mid-wraper-top">
+
+<div class="mid-leftouter">
+
+<div class="mid-left-container">
+<h1>Edit drill <span class="yellow-heading">{{ drill.name }}</span></h1>
+
+<form action="#" method = 'post'>
+	<p>Name:</p>
+		<input type ='text' size='30' name='name' placeholder = '{{drill.name }}'>
+	<p>Description:</p>
+		<input type ='text' size='30' name='description' placeholder = '{{drill.description}}'>
+	<input type='submit' value='Edit'>
+	<a href = '{{url_for('showDrill', drill_id=drill.id)}}'> Cancel </a>
+</form>
+</div>
+
+</div><!-- mid-left-outer -->
+
+</div><!-- mid-wraper-top -->
+
+<div class="mid-wraper-bttm"><img src="../static/about-mid-bttm.jpg" alt=""></div>
+</div><!-- mid-wraper -->
+
 {% include 'footer.html' %}
+</div><!-- main-wraper -->
 </body>
 </html>
 
