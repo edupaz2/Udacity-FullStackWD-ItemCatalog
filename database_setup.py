@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+
 class User(Base):
     __tablename__ = 'user'
 
@@ -25,6 +26,7 @@ class User(Base):
             'id': self.id,
         }
 
+
 class Category(Base):
     __tablename__ = 'category'
 
@@ -38,6 +40,7 @@ class Category(Base):
             'name': self.name,
             'id': self.id,
         }
+
 
 class Drill(Base):
     __tablename__ = 'drill'

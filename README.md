@@ -29,8 +29,9 @@ The drills categories will be:
 2. Clone the project: git clone https://github.com/edupaz2/Udacity-FullStackWD-ItemCatalog.git
 3. Launch the Vagrant VM (vagrant up)
 4. Connect to Vagrant VM (vagrant ssh)
-5. Run your application within the VM (python /vagrant/itemcatalog.py)
-6. Access and test your application by visiting http://localhost:5000 locally
+5. Init and populate DB with categories (python vagrant/populate_db.py)
+6. Run your application within the VM (python /vagrant/itemcatalog.py)
+7. Access and test your application by visiting http://localhost:5000 locally
 
 
 # Design of the site:
@@ -44,6 +45,12 @@ The pages are:
 - /drill/<int:drill_id>: Show a drill information. (drill.html)
 - /drill/<int:drill_id>/edit: For editing a drill. (editDrill.html)
 - /drill/<int:drill_id>/delete: For deleting a drill. (deleteDrill.html)
+
+## JSON
+The JSON API access points are:
+- /categories/JSON: to display all available categories.
+- /category/<int:category_id>/JSON: to display detailed information about one specific category.
+- /drill/<int:drill_id>/JSON: to display detailed information about one specific drill.
 
 
  
