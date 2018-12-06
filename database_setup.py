@@ -9,6 +9,9 @@ Base = declarative_base()
 
 
 class User(Base):
+    """
+    Registered user information is stored in db
+    """
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
@@ -28,6 +31,9 @@ class User(Base):
 
 
 class Category(Base):
+    """
+    A category of drills stored in db
+    """
     __tablename__ = 'category'
 
     id = Column(Integer, primary_key=True)
@@ -43,6 +49,9 @@ class Category(Base):
 
 
 class Drill(Base):
+    """
+    A hockey drill stored in db
+    """
     __tablename__ = 'drill'
 
     id = Column(Integer, primary_key=True)
