@@ -224,6 +224,7 @@ def editDrill(drill_id):
             toEdit.description = request.form['description']
         session.add(toEdit)
         session.commit()
+        category_id = toDelete.category_id
         return redirect(url_for('showCategory', category_id = category_id))
     else:
         return render_template('editDrill.html', drill = toEdit, user=getCurrentUserInfo())
