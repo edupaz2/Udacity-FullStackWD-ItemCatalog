@@ -259,8 +259,8 @@ def editDrill(drill_id):
     if 'username' not in login_session:
         return redirect('/login')
     toEdit = session.query(Drill).filter_by(id=drill_id).one()
-    if request.method == 'POST' and
-    toEdit.user_id == getUserID(login_session['email']):
+    if (request.method == 'POST' and
+            toEdit.user_id == getUserID(login_session['email'])):
         if request.form['name']:
             toEdit.name = request.form['name']
         if request.form['description']:
@@ -281,8 +281,8 @@ def deleteDrill(drill_id):
     if 'username' not in login_session:
         return redirect('/login')
     toDelete = session.query(Drill).filter_by(id=drill_id).one()
-    if request.method == 'POST' and
-    toDelete.user_id == getUserID(login_session['email']):
+    if (request.method == 'POST' and
+            toDelete.user_id == getUserID(login_session['email'])):
         category_id = toDelete.category_id
         session.delete(toDelete)
         session.commit()
@@ -344,31 +344,7 @@ def getUserID(email):
 def getCurrentUserInfo():
     return getUserInfo(login_session['user_id'])
 
-
-# Populate DB with categories
-def populateCategory(n):
-    if len(session.query(Category).filter_by(name=n).all()) == 0:
-        category_item = Category(name=n)
-        session.add(category_item)
-        session.commit()
-
-
-def populateDB():
-    populateCategory('Offensive')
-    populateCategory('Defensive')
-    populateCategory('Forward')
-    populateCategory('Defenseman')
-    populateCategory('Goalie')
-    populateCategory('Warm-up')
-    populateCategory('Shooting')
-    populateCategory('Passing')
-    populateCategory('Power Play')
-    populateCategory('Penalty Killing')
-    populateCategory('Fun games')
-    populateCategory('Conditioning')
-
 if __name__ == '__main__':
     app.debug = True
-    populateDB()
     app.secret_key = 'super_secret_key'
     app.run(host='0.0.0.0', port=5000)
